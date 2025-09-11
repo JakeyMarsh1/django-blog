@@ -34,7 +34,11 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'codestar-blog-app-ci-296acd67a405.herokuapp.com',
 ]
-CSRF_TRUSTED_ORIGINS = ['https://codestar-blog-app-ci-296acd67a405.herokuapp.com',]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.codeinstitute-ide.net/",
+    "https://*.herokuapp.com"
+]
 
 
 host = os.environ.get("HOST")
