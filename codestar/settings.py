@@ -26,8 +26,12 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com',]
-CSRF_TRUSTED_ORIGINS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'codestar-blog-app-ci-296acd67a405.herokuapp.com',
+]
+CSRF_TRUSTED_ORIGINS = ['https://codestar-blog-app-ci-296acd67a405.herokuapp.com',]
 
 
 host = os.environ.get("HOST")
