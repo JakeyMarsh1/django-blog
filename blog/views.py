@@ -8,7 +8,7 @@ from .forms import CommentForm
 
 # Create your views here.
 class PostList(generic.ListView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(status=1)
     template_name = "blog/index.html"
     paginate_by = 6
 
@@ -39,9 +39,9 @@ def post_detail(request, slug):
             comment.author = request.user
             comment.post = post
             comment.save()
-        messages.add_message(
-            request, messages.SUCCESS,
-            'Comment submitted and awaiting approval'
+            messages.add_message(
+                request, messages.SUCCESS,
+                'Comment submitted and awaiting approval'
             )
 
     comment_form = CommentForm()
@@ -54,7 +54,7 @@ def post_detail(request, slug):
             "comments": comments,
             "comment_count": comment_count,
             "comment_form": comment_form,
-        }
+        },
     )
 
 
