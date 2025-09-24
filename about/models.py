@@ -14,10 +14,14 @@ class About(models.Model):
         updated_on (DateTimeField): Timestamp when the profile was last updated.
         content (TextField): Main content or biography for the profile.
     """
-    title = models.CharField(max_length=200)
-    profile_image = CloudinaryField('image', default='placeholder')
-    updated_on = models.DateTimeField(auto_now=True)
-    content = models.TextField()
+    title = models.CharField(max_length=200, verbose_name="Profile Title")
+    profile_image = CloudinaryField('image', default='placeholder', verbose_name="Profile Photo")
+    updated_on = models.DateTimeField(auto_now=True, verbose_name="Last Updated")
+    content = models.TextField(verbose_name="About Content")
+
+    class Meta:
+        verbose_name = "About Page"
+        verbose_name_plural = "About Pages"
 
     def __str__(self):
         return self.title
@@ -33,10 +37,14 @@ class CollaborateRequest(models.Model):
         message (TextField): The collaboration message or inquiry.
         read (BooleanField): Whether the request has been read/processed.
     """
-    name = models.CharField(max_length=200)
-    email = models.EmailField()
-    message = models.TextField()
-    read = models.BooleanField(default=False)
+    name = models.CharField(max_length=200, verbose_name="Full Name")
+    email = models.EmailField(verbose_name="Email Address")
+    message = models.TextField(verbose_name="Collaboration Message")
+    read = models.BooleanField(default=False, verbose_name="Mark as Read")
+
+    class Meta:
+        verbose_name = "Collaboration Request"
+        verbose_name_plural = "Collaboration Requests"
 
     def __str__(self):
         return f"Collaboration request from {self.name}"
