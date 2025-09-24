@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Example: Enhanced Blog Post Display with Custom Labels -->
+
+<div class="container">
+    <!-- Instead of just {{ post.title }}, we can add custom descriptive labels -->
+    <article class="blog-post">
+        <header>
+            <h1>{{ post.title }}</h1>
+            <div class="post-meta">
+                <span class="author-label">Written by:</span> 
+                <strong>{{ post.author.username }}</strong>
+                
+                <span class="date-label">Published on:</span> 
+                <time datetime="{{ post.created_on|date:'Y-m-d' }}">
+                    {{ post.created_on|date:'F d, Y' }}
+                </time>
+                
+                {% if post.updated_on != post.created_on %}
+                    <span class="updated-label">Last updated:</span>
+                    <time datetime="{{ post.updated_on|date:'Y-m-d' }}">
+                        {{ post.updated_on|date:'F d, Y' }}
+                    </time>
+                {% endif %}
+                
+                <span class="status-label">Status:</span>
+                <span class="status-value {% if post.status == 1 %}published{% else %}draft{% endif %}">
+                    {% if post.status == 1 %}Published{% else %}Draft{% endif %}
+                </span>
+            </div>
+        </header>
+        
+        {% if post.featured_image and post.featured_image.url %}
+        <div class="featured-image">
+            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="img-fluid">
+            <p class="image-caption">Featured image for: {{ post.title }}</p>
+        </div>
+        {% endif %}
+        
+        {% if post.excerpt %}
+        <div class="post-excerpt">
+            <h3>Article Summary:</h3>
+            <p>{{ post.excerpt }}</p>
+        </div>
+        {% endif %}
+        
+        <div class="post-content">
+            <h3>Full Article:</h3>
+            {{ post.content|safe }}
+        </div>
+    </article>
+    
+    <!-- Enhanced Comments Section with Custom Labels -->
+    <section class="comments-section">
+        <h3>Reader Comments ({{ post.comments.count }})</h3>
+        
+        {% for comment in post.comments.all %}
+            {% if comment.approved %}
+            <div class="comment">
+                <div class="comment-meta">
+                    <span class="commenter-label">Comment by:</span>
+                    <strong>{{ comment.author.username }}</strong>
+                    
+                    <span class="comment-date-label">Posted on:</span>
+                    <time datetime="{{ comment.created_on|date:'Y-m-d' }}">
+                        {{ comment.created_on|date:'F d, Y \a\t g:i A' }}
+                    </time>
+                </div>
+                <div class="comment-body">
+                    <p>{{ comment.body }}</p>
+                </div>
+            </div>
+            {% endif %}
+        {% empty %}
+            <p>No comments yet. Be the first to share your thoughts!</p>
+        {% endfor %}
+        
+        <!-- Comment Form with Enhanced Labels -->
+        <div class="add-comment">
+            <h4>Share Your Thoughts</h4>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.body.id_for_label }}">Your Comment:</label>
+                    {{ form.body }}
+                    <small class="form-text text-muted">
+                        Share your thoughts about this post. Comments are moderated before appearing.
+                    </small>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Comment</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+<style>
+/* CSS to make labels more prominent */
+.post-meta span[class$="-label"] {
+    font-weight: bold;
+    color: #6c757d;
+    margin-right: 5px;
+}
+
+.post-meta span[class$="-label"]:not(:first-child) {
+    margin-left: 15px;
+}
+
+.status-value.published {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-value.draft {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.comment-meta span[class$="-label"] {
+    font-weight: bold;
+    color: #6c757d;
+    margin-right: 5px;
+}
+
+.image-caption {
+    font-style: italic;
+    color: #6c757d;
+    text-align: center;
+    margin-top: 5px;
+}
+</style>
+
+{% endblock content %}

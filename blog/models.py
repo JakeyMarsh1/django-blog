@@ -26,20 +26,22 @@ class Post(models.Model):
         excerpt (TextField): Optional short summary of the post.
         updated_on (DateTimeField): Timestamp when the post was last updated.
     """
-    title = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(max_length=200, unique=True)
+    title = models.CharField(max_length=200, unique=True, verbose_name="Post Title")
+    slug = models.SlugField(max_length=200, unique=True, verbose_name="URL Slug")
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="blog_posts"
+        User, on_delete=models.CASCADE, related_name="blog_posts", verbose_name="Author"
         )
-    featured_image = CloudinaryField('image', default='placeholder')
-    content = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    status = models.IntegerField(choices=STATUS, default=0)
-    excerpt = models.TextField(blank=True)
-    updated_on = models.DateTimeField(auto_now=True)
+    featured_image = CloudinaryField('image', default='placeholder', verbose_name="Featured Image")
+    content = models.TextField(verbose_name="Post Content")
+    created_on = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
+    status = models.IntegerField(choices=STATUS, default=0, verbose_name="Publication Status")
+    excerpt = models.TextField(blank=True, verbose_name="Short Summary")
+    updated_on = models.DateTimeField(auto_now=True, verbose_name="Last Updated")
 
     class Meta:
         ordering = ["-created_on"]
+        verbose_name = "Blog Post"
+        verbose_name_plural = "Blog Posts"
 
     def __str__(self):
         return f"The title of this post is {self.title}"
@@ -57,17 +59,19 @@ class Comment(models.Model):
         created_on (DateTimeField): Timestamp when the comment was created.
     """
     post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name="comments"
+        Post, on_delete=models.CASCADE, related_name="comments", verbose_name="Blog Post"
     )
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="commenter"
+        User, on_delete=models.CASCADE, related_name="commenter", verbose_name="Comment Author"
     )
-    body = models.TextField()
-    approved = models.BooleanField(default=False)
-    created_on = models.DateTimeField(auto_now_add=True)
+    body = models.TextField(verbose_name="Comment Text")
+    approved = models.BooleanField(default=False, verbose_name="Approved for Display")
+    created_on = models.DateTimeField(auto_now_add=True, verbose_name="Date Posted")
 
     class Meta:
         ordering = ["-created_on"]
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
 
     def __str__(self):
         return f"Comment {self.body} by {self.author}"
